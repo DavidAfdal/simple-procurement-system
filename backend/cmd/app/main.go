@@ -17,13 +17,10 @@ func main() {
 	db, err := database.InitDB(&cfg.Database)
 	checkError(err)
 
-	err = database.AutoMigrate(db)
-	checkError(err)
-
 	tokenUse := token.NewTokenUseCase(cfg.JWT.SecretKey, time.Duration(cfg.JWT.ExpiresAt)*time.Hour)
 
 	publicRoutes := builder.BuildAppPublicRoutes(db, tokenUse)
-	privateRoutes := builder.BuildAppPrivateRoutes(db, tokenUse)
+	privateRoutes := builder.BuildAppPrivateRoutes(db, tokenUse, &cfg.Webhook)
 
 	srv := server.NewServer(publicRoutes, privateRoutes, cfg.JWT.SecretKey, tokenUse)
 	srv.Run()
