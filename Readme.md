@@ -109,7 +109,6 @@ File `.env` digunakan untuk menyimpan konfigurasi environment aplikasi backend.
 #### Contoh `.env`
 ```env
 ENV=development
-PORT=8080
 
 DATABASE_HOST=localhost
 DATABASE_PORT=3306
