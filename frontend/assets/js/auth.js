@@ -36,7 +36,7 @@ $(document).ready(function() {
         apiRequest('/users/login', 'POST', data, function(res) {
             localStorage.setItem('jwtToken', res.data.access_token);
             Swal.fire('Success', res.message, 'success').then(() => {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'pages/dashboard.html';
             });
         });
     });
@@ -77,7 +77,7 @@ $(document).ready(function() {
 
         apiRequest('/users/register', 'POST', data, function(res) {
             Swal.fire('Success', res.message, 'success').then(() => {
-                window.location.href = 'login.html';
+                window.location.href = '../index.html';
             });
         });
     });
@@ -100,7 +100,7 @@ $(document).ready(function() {
         }
 
         localStorage.removeItem('jwtToken');
-        window.location.href = 'login.html';
+        window.location.href = '../index.html';
     });
 });
 

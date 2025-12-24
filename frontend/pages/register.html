@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Management System</title>
+    <title>Register - Purchase Management System  </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
@@ -15,34 +15,36 @@
             <div class="text-center mb-8">
                 <i class="fas fa-box-open text-5xl text-blue-600 mb-4"></i>
                 <h2 class="text-3xl font-bold text-gray-800">Purchase System</h2>
-                <p class="text-gray-600 mt-2">Sign in to your account</p>
+                <p class="text-gray-600 mt-2">Create a new account</p>
             </div>
-            <form id="loginForm">
+            <form id="registerForm">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
-                    <input type="text" id="loginUsername" required 
+                    <input type="text" id="registerUsername" required 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            placeholder="Enter your username">
                 </div>
                 <div class="mb-6">
                     <label class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
-                    <input type="password" id="loginPassword" required 
+                    <input type="password" id="registerPassword" required 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            placeholder="Enter your password">
                 </div>
                 <button type="submit" 
                         class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
-                    Sign In
+                    Sign Up
                 </button>
-                <p class="text-center text-gray-600 mt-4">
-                    Don't have an account? 
-                    <a href="register.html" class="text-blue-600 font-semibold hover:underline">Register</a>
+                 <p class="text-center text-gray-600 mt-4">
+                    Already have an account? 
+                    <a href="../index.html" class="text-blue-600 font-semibold hover:underline">
+                        Login
+                    </a>
                 </p>
             </form>
         </div>
     </div>
 
-    <script src="assets/js/api.js"></script>
-    <script src="assets/js/auth.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
 </body>
 </html>
