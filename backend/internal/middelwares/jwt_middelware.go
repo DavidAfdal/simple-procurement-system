@@ -1,7 +1,9 @@
 package middelwares
 
 import (
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/DavidAfdal/purchasing-systeam/pkg/response"
 	"github.com/DavidAfdal/purchasing-systeam/pkg/token"
@@ -13,12 +15,20 @@ func JWTProtection(secretKey string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		auth := c.GetHeader("Authorization")
 		if auth == "" {
-			response.ErrorResponse(c, http.StatusUnauthorized, "anda harus login untuk mengakses resource ini")
+			log.Println("Authorization header is missing")
+			response.ErrorResponse(c, http.StatusUnauthorized, "You must be logged in to access this resource")
 			c.Abort()
 			return
 		}
 
-		tokenStr := auth[len("Bearer "):]
+		if !strings.HasPrefix(auth, "Bearer ") {
+			log.Println("Invalid Authorization header format:", auth)
+			response.ErrorResponse(c, http.StatusUnauthorized, "You must be logged in to access this resource")
+			c.Abort()
+			return
+		}
+
+		tokenStr := strings.TrimPrefix(auth, "Bearer ")
 
 		tokenData, err := jwt.ParseWithClaims(
 			tokenStr,
@@ -28,8 +38,16 @@ func JWTProtection(secretKey string) gin.HandlerFunc {
 			},
 		)
 
-		if err != nil || !tokenData.Valid {
-			response.ErrorResponse(c, http.StatusUnauthorized, "anda harus login untuk mengakses resource ini")
+		if err != nil {
+			log.Println("Failed to parse JWT:", err)
+			response.ErrorResponse(c, http.StatusUnauthorized, "You must be logged in to access this resource")
+			c.Abort()
+			return
+		}
+
+		if !tokenData.Valid {
+			log.Println("Invalid JWT token:", tokenStr)
+			response.ErrorResponse(c, http.StatusUnauthorized, "You must be logged in to access this resource")
 			c.Abort()
 			return
 		}
