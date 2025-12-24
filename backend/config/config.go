@@ -9,10 +9,9 @@ import (
 
 type Config struct {
 	Env      string         `env:"ENV" envDefault:"development"`
-	Host     string         `env:"HOST" envDefault:"localhost"`
-	Port     string         `env:"PORT" envDefault:"5000"`
 	Database DatabaseConfig `envPrefix:"DATABASE_"`
 	JWT      JWTConfig      `envPrefix:"JWT_"`
+	Webhook  WebhookConfig  `envPrefix:"WEBHOOK_"`
 }
 
 type DatabaseConfig struct {
@@ -20,7 +19,11 @@ type DatabaseConfig struct {
 	Port     string `env:"PORT" envDefault:"3306"`
 	User     string `env:"USER" envDefault:"root"`
 	Password string `env:"PASSWORD" envDefault:""`
-	Database string `env:"DATABASE" envDefault:"app_db"`
+	Database string `env:"DATABASE" envDefault:"purchase_db"`
+}
+
+type WebhookConfig struct {
+	URl string `env:"URL" envDefault:"https://webhook.site/f0129d12-4d5b-4e35-8ddc-3dcaddf9405d"`
 }
 type JWTConfig struct {
 	SecretKey string `env:"SECRET_KEY" envDefault:"secret"`
