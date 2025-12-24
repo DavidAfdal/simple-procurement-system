@@ -6,8 +6,8 @@ import (
 )
 
 type SupplierRepo interface {
-	GetSuppliers() ([]models.Supplier, error)
-	GetSupplierByID(id string) (*models.Supplier, error)
+	FindSuppliers() ([]models.Supplier, error)
+	FindSupplierByID(id string) (*models.Supplier, error)
 	CreateSupplier(supplier *models.Supplier) (*models.Supplier, error)
 	UpdateSupplier(supplier *models.Supplier) error
 	DeleteSupplier(supplier *models.Supplier) error
@@ -21,7 +21,7 @@ func NewSupplierRepo(db *gorm.DB) SupplierRepo {
 	return &supplierRepo{db: db}
 }
 
-func (s *supplierRepo) GetSuppliers() ([]models.Supplier, error) {
+func (s *supplierRepo) FindSuppliers() ([]models.Supplier, error) {
 	var suppliers []models.Supplier
 	if err := s.db.Find(&suppliers).Error; err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func (s *supplierRepo) GetSuppliers() ([]models.Supplier, error) {
 	return suppliers, nil
 }
 
-func (s *supplierRepo) GetSupplierByID(id string) (*models.Supplier, error) {
+func (s *supplierRepo) FindSupplierByID(id string) (*models.Supplier, error) {
 	var supplier models.Supplier
 	if err := s.db.Where("id = ?", id).First(&supplier).Error; err != nil {
 		return nil, err

@@ -6,9 +6,8 @@ import (
 )
 
 type UserRepo interface {
-	GetUsers() ([]models.User, error)
-	GetUserByID(id string) (*models.User, error)
-	GetUserByUsername(username string) (*models.User, error)
+	FindUsers() ([]models.User, error)
+	FindUserByUsername(username string) (*models.User, error)
 	CreateUser(user *models.User) (*models.User, error)
 	UpdateUser(user *models.User) (*models.User, error)
 	DeleteUser(user *models.User) error
@@ -21,7 +20,7 @@ func NewUserRepo(db *gorm.DB) UserRepo {
 	return &userRepo{db: db}
 }
 
-func (u *userRepo) GetUsers() ([]models.User, error) {
+func (u *userRepo) FindUsers() ([]models.User, error) {
 	var users []models.User
 	if err := u.db.Find(&users).Error; err != nil {
 		return nil, err
@@ -29,15 +28,7 @@ func (u *userRepo) GetUsers() ([]models.User, error) {
 	return users, nil
 }
 
-func (u *userRepo) GetUserByID(id string) (*models.User, error) {
-	var user models.User
-	if err := u.db.Where("id = ?", id).First(&user).Error; err != nil {
-		return nil, err
-	}
-	return &user, nil
-}
-
-func (u *userRepo) GetUserByUsername(username string) (*models.User, error) {
+func (u *userRepo) FindUserByUsername(username string) (*models.User, error) {
 	var user models.User
 	if err := u.db.Where("username = ?", username).First(&user).Error; err != nil {
 		return nil, err

@@ -2,16 +2,15 @@ package repositories
 
 import (
 	"github.com/DavidAfdal/purchasing-systeam/internal/models"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
 type ItemRepo interface {
 	FindItems() ([]models.Item, error)
-	FindItemByID(id string) (models.Item, error)
-	FindByIDForUpdate(tx *gorm.DB, id uuid.UUID) (*models.Item, error)
-	CreateItem(item *models.Item) error
+	FindItemByID(id string) (*models.Item, error)
+	FindByIDForUpdate(tx *gorm.DB, id string) (*models.Item, error)
+	CreateItem(item *models.Item) (*models.Item, error)
 	UpdateItem(item *models.Item) error
 	DeleteItem(item *models.Item) error
 	DecramentStock(tx *gorm.DB, item *models.Item, qty int) error
@@ -32,26 +31,26 @@ func (i *itemRepo) FindItems() ([]models.Item, error) {
 	return items, nil
 }
 
-func (i *itemRepo) FindItemByID(id string) (models.Item, error) {
+func (i *itemRepo) FindItemByID(id string) (*models.Item, error) {
 	var item models.Item
 	if err := i.db.Where("id = ?", id).First(&item).Error; err != nil {
-		return models.Item{}, err
+		return nil, err
 	}
-	return item, nil
+	return &item, nil
 }
 
-func (r *itemRepo) FindByIDForUpdate(tx *gorm.DB, id uuid.UUID) (*models.Item, error) {
+func (r *itemRepo) FindByIDForUpdate(tx *gorm.DB, id string) (*models.Item, error) {
 	var item models.Item
 	err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
 		First(&item, "id = ?", id).Error
 	return &item, err
 }
 
-func (i *itemRepo) CreateItem(item *models.Item) error {
+func (i *itemRepo) CreateItem(item *models.Item) (*models.Item, error) {
 	if err := i.db.Create(item).Error; err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return item, nil
 }
 
 func (i *itemRepo) UpdateItem(item *models.Item) error {
