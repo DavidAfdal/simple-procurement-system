@@ -143,28 +143,28 @@ Frontend dijalankan menggunakan **extension Live Server** di Visual Studio Code.
 ## 📚 API Endpoints
 
 ### Users
-- POST /users/register
-- POST /users/login
-- POST /users/logout
+- POST /api/users/register
+- POST /api/users/login
+- POST /api/users/logout
 
 ### Purchasings
-- POST /purchasings
-- GET /purchasings
-- GET /purchasings/me
+- POST /api/purchasings
+- GET /api/purchasings
+- GET /api/purchasings/me
 
 ### Suppliers
-- GET /suppliers
-- GET /suppliers/:supplier_id
-- POST /suppliers
-- PUT /suppliers/:supplier_id
-- DELETE /suppliers/:supplier_id
+- GET /api/suppliers
+- GET /api/suppliers/:supplier_id
+- POST /api/suppliers
+- PUT /api/suppliers/:supplier_id
+- DELETE /api/suppliers/:supplier_id
 
 ### Items
-- GET /items
-- GET /items/:item_id
-- POST /items
-- PUT /items/:item_id
-- DELETE /items/:item_id
+- GET /api/items
+- GET /api/items/:item_id
+- POST /api/items
+- PUT /api/items/:item_id
+- DELETE /api/items/:item_id
 
 ---
 
@@ -190,7 +190,7 @@ Buat environment baru di Postman dengan variabel berikut:
 
 | Variable | Value |
 |--------|-------|
-| base_url | http://localhost:8080 |
+| base_url | http://localhost:8080/api |
 | access_token | (diisi otomatis setelah login) |
 
 ### 4. Login untuk Mendapatkan Token
