@@ -1,6 +1,13 @@
 package handler
 
-import "github.com/DavidAfdal/purchasing-systeam/pkg/validator"
+import (
+	"net/http"
+
+	"github.com/DavidAfdal/purchasing-systeam/pkg/errors"
+	"github.com/DavidAfdal/purchasing-systeam/pkg/response"
+	"github.com/DavidAfdal/purchasing-systeam/pkg/validator"
+	"github.com/gin-gonic/gin"
+)
 
 type Handler struct {
 	UserHandler       *UserHandler
@@ -22,9 +29,17 @@ func checkValidation(input interface{}) (errorMessage string, data interface{}) 
 	validationErrors := validator.Validate(input)
 	if validationErrors != nil {
 		if _, exists := validationErrors["error"]; exists {
-			return "validasi input gagal", nil
+			return "input validation failed", nil
 		}
-		return "validasi input gagal", validationErrors
+		return "input validation failed", validationErrors
 	}
 	return "", nil
+}
+
+func handleErrorService(c *gin.Context, err error) {
+	if appErr, ok := err.(*errors.AppError); ok {
+		response.ErrorResponse(c, appErr.Code, appErr.Message)
+		return
+	}
+	response.ErrorResponse(c, http.StatusInternalServerError, "something went wrong, please try again")
 }
