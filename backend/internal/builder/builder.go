@@ -1,6 +1,7 @@
 package builder
 
 import (
+	"github.com/DavidAfdal/purchasing-systeam/config"
 	"github.com/DavidAfdal/purchasing-systeam/internal/http/handler"
 	"github.com/DavidAfdal/purchasing-systeam/internal/http/router"
 	"github.com/DavidAfdal/purchasing-systeam/internal/repositories"
@@ -27,7 +28,7 @@ func BuildAppPublicRoutes(db *gorm.DB, tokenUseCase token.TokenUseCase) []*route
 	return router.AppPublicRoute(handler)
 }
 
-func BuildAppPrivateRoutes(db *gorm.DB, tokenUseCase token.TokenUseCase) []*route.Route {
+func BuildAppPrivateRoutes(db *gorm.DB, tokenUseCase token.TokenUseCase, cfg *config.WebhookConfig) []*route.Route {
 
 	userRepo := repositories.NewUserRepo(db)
 	userService := services.NewUserService(userRepo, tokenUseCase)
@@ -41,9 +42,11 @@ func BuildAppPrivateRoutes(db *gorm.DB, tokenUseCase token.TokenUseCase) []*rout
 	itemService := services.NewItemService(itemRepo)
 	itemHandler := handler.NewItemHandler(itemService)
 
+	webhookService := services.NewWebhookService(cfg.URl)
+
 	purchasingRepo := repositories.NewPurchasingRepo(db)
 	purchasingDetailRepo := repositories.NewPurchasingDetailRepo()
-	purchasingService := services.NewPurchasingService(db, purchasingRepo, itemRepo, purchasingDetailRepo)
+	purchasingService := services.NewPurchasingService(db, purchasingRepo, itemRepo, purchasingDetailRepo, webhookService)
 	purchasingHandler := handler.NewPurchasingHandler(purchasingService)
 
 	handler := handler.NewHandler(userHandler, supplierHandler, itemHandler, purchasingHandler)
