@@ -109,7 +109,7 @@ $(document).ready(function() {
                     Swal.fire({
                         icon: 'error',
                         title: 'Purchase Date required!',
-                        text: 'Please select a supplier first',
+                        text: 'Please select a purcahse date first',
                         confirmButtonColor: '#3b82f6'
                     });
                     return;

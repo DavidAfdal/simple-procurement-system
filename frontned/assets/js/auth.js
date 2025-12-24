@@ -4,9 +4,33 @@ $(document).ready(function() {
     $('#loginForm').on('submit', function(e) {
         e.preventDefault();
 
+        const username = $('#loginUsername').val();
+
+        if (!username) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Username required!',
+                text: 'Please input username  first',
+                confirmButtonColor: '#3b82f6'
+            });
+            return;
+        }
+
+        const password = $('#loginPassword').val();
+
+        if (!password) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Password required!',
+                text: 'Please input password first',
+                confirmButtonColor: '#3b82f6'
+            });
+            return;
+        }
+
         const data = {
-            username: $('#loginUsername').val(),
-            password: $('#loginPassword').val()
+            username: username,
+            password: password
         };
 
         apiRequest('/users/login', 'POST', data, function(res) {
@@ -20,9 +44,35 @@ $(document).ready(function() {
     $('#registerForm').on('submit', function(e) {
         e.preventDefault();
 
+
+        const username = $('#registerUsername').val();
+
+        if (!username) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Username required!',
+                text: 'Please input username  first',
+                confirmButtonColor: '#3b82f6'
+            });
+            return;
+        }
+
+        const password = $('#registerPassword').val();
+
+        if (!password) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Password required!',
+                text: 'Please input password first',
+                confirmButtonColor: '#3b82f6'
+            });
+            return;
+        }
+
+
         const data = {
-            username: $('#registerUsername').val(),
-            password: $('#registerPassword').val()
+            username: username,
+            password: password
         };
 
         apiRequest('/users/register', 'POST', data, function(res) {
