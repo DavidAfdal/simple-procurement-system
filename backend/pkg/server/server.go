@@ -45,7 +45,9 @@ func NewServer(
 		v1.Handle(
 			v.Method,
 			v.Path,
+			middelwares.CheckBlacklistToken(tokenUse),
 			middelwares.JWTProtection(secretKey),
+			middelwares.RBACMiddleware(v.Roles...),
 			middelwares.UserContextMiddleware(),
 			v.Handler,
 		)

@@ -1,0 +1,1536 @@
+{
+	"info": {
+		"_postman_id": "13c39314-38b6-4920-91ed-460b4817bc94",
+		"name": "Purchasing System API",
+		"description": "# Purchasing System API\n\nKoleksi ini berisi endpoint untuk sistem pembelian (purchasing), mencakup autentikasi pengguna, pengelolaan pemasok (supplier), dan pembuatan data purchasing.\n\nSemua endpoint menggunakan base URL lingkungan:\n\n`{{base_url}}`\n\nSebagian besar endpoint diasumsikan dilindungi oleh mekanisme autentikasi (misalnya token Bearer di header `Authorization`), kecuali endpoint publik seperti `Register` dan `Login`.\n\n## Pola umum\n\n- **Format URL:** Seluruh URL diawali dengan `{{base_url}}`.\n    \n- **Autentikasi:** Untuk endpoint yang membutuhkan login, kirim header `Authorization: Bearer {{access_token}}`.\n    \n- **Body:** Untuk method `POST` dan `PUT`, body dikirim dalam format JSON pada tab **Body** tipe `raw`.\n    \n- **Respons:**\n    - `200 OK` – Permintaan sukses (GET/PUT/operasi baca/perbarui).\n        \n    - `201 Created` – Data berhasil dibuat (POST).\n        \n    - `400 Bad Request` – Data input tidak valid atau format request salah.\n        \n    - `401 Unauthorized` – Token tidak dikirim atau tidak valid.\n        \n    - `403 Forbidden` – Pengguna tidak memiliki hak akses.\n        \n    - `404 Not Found` – Data atau resource tidak ditemukan.\n        \n    - `500 Internal Server Error` – Kesalahan pada server.\n        \n\nGunakan folder-folder di koleksi ini untuk menelusuri endpoint berdasarkan domain fungsional: autentikasi, purchasing, dan suppliers.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19993089"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"davidafdat\",\r\n    \"password\": \"gelang123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"gelang123\",\r\n    \"role\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 23 Dec 2025 09:39:05 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "129"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": \"25992299-4cae-4aa0-ba4c-a6514c1e955b\",\n        \"username\": \"davidafdal8\",\n        \"role\": \"admin\"\n    }\n}"
+						},
+						{
+							"name": "400",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"gelang123\",\r\n    \"role\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"register"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 23 Dec 2025 09:43:31 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "93"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"message\": \"validasi input gagal\",\n    \"data\": {\n        \"username\": \"Username wajib diisi\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json()\r",
+									"\r",
+									"\r",
+									"if (response.data.access_token) {\r",
+									"    pm.environment.set(\"access_token\", response.data.access_token)\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"davidafdat\",\r\n    \"password\": \"gelang123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"davidafdal\",\r\n    \"password\": \"gelang123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 23 Dec 2025 09:46:03 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "356"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA0MTVlMWQ3LTE4NzMtNDE0OC05YWE5LWQwZjkwN2FjNGIxOCIsInVzZXJuYW1lIjoiZGF2aWRhZmRhbCIsInJvbGUiOiJhZG1pbiIsImlzcyI6InB1cmNoYXNlLXN5c3RlbSIsImV4cCI6MTc2NjQ4Njc2M30.9x4S2LGeH2IAfyLdZVk6FbIE_B1VWu-Pw4tjlEBcuY4\",\n        \"expired_at\": \"2025-12-23 18:46:03 +0800 +08\"\n    }\n}"
+						},
+						{
+							"name": "400",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"davidafdal\",\r\n    \"password\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 23 Dec 2025 09:46:29 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "93"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"message\": \"validasi input gagal\",\n    \"data\": {\n        \"password\": \"Password wajib diisi\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/users/logout",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 06:15:03 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "58"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"logout successful\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Purchasings",
+			"item": [
+				{
+					"name": "Purchasing",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"date\": \"2025-12-23\",\r\n  \"supplier_id\": \"0442aa9e-5ca0-4c57-bb71-235a1455b7ac\",\r\n  \"items\": [\r\n    {\r\n      \"item_id\": \"0caaa01e-3ad3-40d7-b589-7f80de2e6540\",\r\n      \"qty\": 10\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/purchasings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchasings"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"date\": \"2025-12-23\",\r\n  \"supplier_id\": \"0442aa9e-5ca0-4c57-bb71-235a1455b7ac\",\r\n  \"items\": [\r\n    {\r\n      \"item_id\": \"0caaa01e-3ad3-40d7-b589-7f80de2e6540\",\r\n      \"qty\": 10\r\n    }\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/purchasings",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"purchasings"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:52:33 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "72"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"purchasing created successfully\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Purchasing Me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/purchasings/me ",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchasings",
+								"me "
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/purchasings/me ",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"purchasings",
+										"me "
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 06:12:56 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "392"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"your purchasing retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"eebba607-1d37-4635-8b61-e068a705cbf4\",\n            \"date\": \"2025-12-23\",\n            \"user_id\": \"97c3ebc8-faba-4305-9333-b2bd6c7c0d95\",\n            \"supplier_id\": \"0442aa9e-5ca0-4c57-bb71-235a1455b7ac\",\n            \"grand_total\": 70000,\n            \"items\": [\n                {\n                    \"item_id\": \"0caaa01e-3ad3-40d7-b589-7f80de2e6540\",\n                    \"item_name\": \"buku a5\",\n                    \"item_price\": 7000,\n                    \"qty\": 10,\n                    \"sub_total\": 70000\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Purchasing",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/purchasings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchasings"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/purchasings",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"purchasings"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 06:14:27 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "703"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"purchasing retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"a3436200-b155-4d66-abc7-736883b12e1f\",\n            \"date\": \"2025-12-23\",\n            \"user_id\": \"db558763-5eac-4d69-8dc2-6c30f305b9a9\",\n            \"supplier_id\": \"0442aa9e-5ca0-4c57-bb71-235a1455b7ac\",\n            \"grand_total\": 70000,\n            \"items\": [\n                {\n                    \"item_id\": \"0caaa01e-3ad3-40d7-b589-7f80de2e6540\",\n                    \"item_name\": \"buku a5\",\n                    \"item_price\": 7000,\n                    \"qty\": 10,\n                    \"sub_total\": 70000\n                }\n            ]\n        },\n        {\n            \"id\": \"eebba607-1d37-4635-8b61-e068a705cbf4\",\n            \"date\": \"2025-12-23\",\n            \"user_id\": \"97c3ebc8-faba-4305-9333-b2bd6c7c0d95\",\n            \"supplier_id\": \"0442aa9e-5ca0-4c57-bb71-235a1455b7ac\",\n            \"grand_total\": 70000,\n            \"items\": [\n                {\n                    \"item_id\": \"0caaa01e-3ad3-40d7-b589-7f80de2e6540\",\n                    \"item_name\": \"buku a5\",\n                    \"item_price\": 7000,\n                    \"qty\": 10,\n                    \"sub_total\": 70000\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Suppliers",
+			"item": [
+				{
+					"name": "Get Supplier",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/suppliers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/suppliers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"suppliers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:21:28 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "197"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"suppliers retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"0442aa9e-5ca0-4c57-bb71-235a1455b7ac\",\n            \"email\": \"contact@sumbermakmur.co.id\",\n            \"name\": \"PT MantapuJiwa\",\n            \"address\": \"Jakarta\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Supplier By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/suppliers/:supplier_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"suppliers",
+								":supplier_id"
+							],
+							"variable": [
+								{
+									"key": "supplier_id",
+									"value": "0442aa9e-5ca0-4c57-bb71-235a1455b7ac"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/suppliers/:supplier_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"suppliers",
+										":supplier_id"
+									],
+									"variable": [
+										{
+											"key": "supplier_id",
+											"value": "0442aa9e-5ca0-4c57-bb71-235a1455b7ac"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:22:02 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "194"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"supplier retrieved successfully\",\n    \"data\": {\n        \"id\": \"0442aa9e-5ca0-4c57-bb71-235a1455b7ac\",\n        \"email\": \"contact@sumbermakmur.co.id\",\n        \"name\": \"PT MantapuJiwa\",\n        \"address\": \"Jakarta\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"contact@sumbermakmur.co.id\",\r\n    \"name\": \"PT MantapuJiwa\",\r\n    \"address\": \"Jakarta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/suppliers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"contact@sumbermakmur.co.id\",\r\n    \"name\": \"PT MantapuJiwa\",\r\n    \"address\": \"Jakarta\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/suppliers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"suppliers"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:14:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "192"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"supplier created successfully\",\n    \"data\": {\n        \"id\": \"e643f12e-1de2-4f2b-a494-8d70728cac01\",\n        \"email\": \"contact@sumbermakmur.co.id\",\n        \"name\": \"PT MantapuJiwa\",\n        \"address\": \"Jakarta\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Supplier",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \"email\": \"contact@sumbermakmur.co.id\",\r\n      \"name\": \"PT MantapuJiwa\",\r\n      \"address\": \"Jakarta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/suppliers/:supplier_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"suppliers",
+								":supplier_id"
+							],
+							"variable": [
+								{
+									"key": "supplier_id",
+									"value": "fd9ed320-dfdb-11f0-8aff-00155dee7ef5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n      \"email\": \"contact@sumbermakmur.com\",\r\n      \"name\": \"PT MantapuJiwas133\",\r\n      \"address\": \"Jakarta\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/suppliers/:supplier_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"suppliers",
+										":supplier_id"
+									],
+									"variable": [
+										{
+											"key": "supplier_id",
+											"value": "e643f12e-1de2-4f2b-a494-8d70728cac01"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:20:41 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "194"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"supplier updated successfully\",\n    \"data\": {\n        \"id\": \"e643f12e-1de2-4f2b-a494-8d70728cac01\",\n        \"email\": \"contact@sumbermakmur.com\",\n        \"name\": \"PT MantapuJiwas133\",\n        \"address\": \"Jakarta\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Supplier",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/suppliers/:supplier_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"suppliers",
+								":supplier_id"
+							],
+							"variable": [
+								{
+									"key": "supplier_id",
+									"value": "fd9ed320-dfdb-11f0-8aff-00155dee7ef5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/suppliers/:supplier_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"suppliers",
+										":supplier_id"
+									],
+									"variable": [
+										{
+											"key": "supplier_id",
+											"value": "e643f12e-1de2-4f2b-a494-8d70728cac01"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:21:02 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "70"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"supplier deleted successfully\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Items",
+			"item": [
+				{
+					"name": "Get Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/items",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"items"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:19:40 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "157"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"items retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"ec068212-1ace-4fb7-b829-5892798286e0\",\n            \"name\": \"kertas a23\",\n            \"stock\": 100,\n            \"price\": 2000\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Items By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/items/:item_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"items",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "ec068212-1ace-4fb7-b829-5892798286e0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/items/:item_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"items",
+										":item_id"
+									],
+									"variable": [
+										{
+											"key": "item_id",
+											"value": "ec068212-1ace-4fb7-b829-5892798286e0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:19:21 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "154"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"item retrieved successfully\",\n    \"data\": {\n        \"id\": \"ec068212-1ace-4fb7-b829-5892798286e0\",\n        \"name\": \"kertas a23\",\n        \"stock\": 100,\n        \"price\": 2000\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"buku a5\",\r\n    \"stock\": 100,\r\n    \"price\": 7000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"kertas\",\r\n    \"stock\": 100,\r\n    \"price\": 2000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/items",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"items"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:02:50 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "148"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"item created successfully\",\n    \"data\": {\n        \"id\": \"e07b98da-e6cf-42f0-8aca-8903441791a8\",\n        \"name\": \"kertas\",\n        \"stock\": 100,\n        \"price\": 2000\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"kertas a23\",\r\n    \"stock\": 100,\r\n    \"price\": 2000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/items/:item_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"items",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "ec068212-1ace-4fb7-b829-5892798286e0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"kertas a23\",\r\n    \"stock\": 100,\r\n    \"price\": 2000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/items/:item_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"items",
+										":item_id"
+									],
+									"variable": [
+										{
+											"key": "item_id",
+											"value": "ec068212-1ace-4fb7-b829-5892798286e0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:19:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "152"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"item updated successfully\",\n    \"data\": {\n        \"id\": \"ec068212-1ace-4fb7-b829-5892798286e0\",\n        \"name\": \"kertas a23\",\n        \"stock\": 100,\n        \"price\": 2000\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/items/:item_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"items",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "e07b98da-e6cf-42f0-8aca-8903441791a8"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/items/:item_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"items",
+										":item_id"
+									],
+									"variable": [
+										{
+											"key": "item_id",
+											"value": "e07b98da-e6cf-42f0-8aca-8903441791a8"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Authorization, Content-Type"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Dec 2025 05:18:03 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "66"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"item deleted successfully\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

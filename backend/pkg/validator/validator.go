@@ -33,7 +33,7 @@ func Validate(input interface{}) map[string]string {
 			} else if jsonTag != "" {
 				fieldName = jsonTag
 			} else {
-				fieldName = err.Field() // fallback to struct field name if both tags are missing
+				fieldName = err.Field()
 			}
 
 			validationErrors[fieldName] = getErrorMessage(err)
@@ -59,25 +59,25 @@ func dateWitTimeValidationFunc(fl validator.FieldLevel) bool {
 func getErrorMessage(err validator.FieldError) string {
 	switch err.Tag() {
 	case "required":
-		return fmt.Sprintf("%s wajib diisi", err.Field())
+		return fmt.Sprintf("%s is required", err.Field())
 
 	case "email":
-		return fmt.Sprintf("%s harus berupa alamat email yang valid", err.Field())
+		return fmt.Sprintf("%s must be a valid email address", err.Field())
 
 	case "min":
-		return fmt.Sprintf("%s minimal %s karakter", err.Field(), err.Param())
+		return fmt.Sprintf("%s must be at least %s characters", err.Field(), err.Param())
 
 	case "date":
-		return fmt.Sprintf("%s harus berupa tanggal dengan format YYYY-MM-DD", err.Field())
+		return fmt.Sprintf("%s must be a date in the format YYYY-MM-DD", err.Field())
 
 	case "date_with_time":
-		return fmt.Sprintf("%s harus berupa tanggal dan waktu dengan format YYYY-MM-DD HH:MM:SS", err.Field())
+		return fmt.Sprintf("%s must be a date and time in the format YYYY-MM-DD HH:MM:SS", err.Field())
 
 	case "oneof":
 		fields := strings.Split(err.Param(), " ")
-		return fmt.Sprintf("harus mengisi salah satu dari field berikut: %s", strings.Join(fields, ", "))
+		return fmt.Sprintf("must be one of the following: %s", strings.Join(fields, ", "))
 
 	default:
-		return fmt.Sprintf("%s tidak valid", err.Field())
+		return fmt.Sprintf("%s is invalid", err.Field())
 	}
 }

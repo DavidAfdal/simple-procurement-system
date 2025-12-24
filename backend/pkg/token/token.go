@@ -43,16 +43,16 @@ func (t *tokenUseCase) CreateClaims(userId, username, role string) JwtCustomClai
 		Username: username,
 		Role:     role,
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer: "purchase-system",
+			Issuer:   "purchase-system",
+			IssuedAt: jwt.NewNumericDate(time.Now()),
 		},
 	}
 }
 
 func (t *tokenUseCase) GenerateAccessToken(claims JwtCustomClaims) (string, time.Time, error) {
-	if claims.ExpiresAt == nil {
-		expirationTime := time.Now().Add(t.expirationDuration)
-		claims.ExpiresAt = jwt.NewNumericDate(expirationTime)
-	}
+	expirationTime := time.Now().Add(t.expirationDuration)
+	claims.ExpiresAt = jwt.NewNumericDate(expirationTime)
+
 	plainToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	encodedToken, err := plainToken.SignedString([]byte(t.secretKey))
