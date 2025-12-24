@@ -11,7 +11,7 @@ type User struct {
 	Password string    `gorm:"type:varchar(255);not null"`
 	Role     string    `gorm:"type:varchar(50);not null"`
 
-	Purchasings []Purchasing `gorm:"foreignKey:UserID"`
+	Purchasings []Purchasing `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {

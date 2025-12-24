@@ -11,7 +11,7 @@ type Item struct {
 	Stock int64     `gorm:"type:bigint;not null"`
 	Price int64     `gorm:"type:bigint;not null"`
 
-	PurchasingDetails []PurchasingDetail `gorm:"foreignKey:ItemID"`
+	PurchasingDetails []PurchasingDetail `gorm:"foreignKey:ItemID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func (p *Item) BeforeCreate(tx *gorm.DB) error {

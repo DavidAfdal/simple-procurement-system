@@ -12,8 +12,8 @@ type PurchasingDetail struct {
 	Qty          int64     `gorm:"type:bigint;not null"`
 	SubTotal     int64     `gorm:"type:bigint;not null"`
 
-	Purchasing Purchasing `gorm:"foreignKey:PurchasingID"`
-	Items      Item       `gorm:"foreignKey:ItemID"`
+	Purchasing Purchasing `gorm:"foreignKey:PurchasingID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Items      Item       `gorm:"foreignKey:ItemID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func (pd *PurchasingDetail) BeforeCreate(tx *gorm.DB) error {
